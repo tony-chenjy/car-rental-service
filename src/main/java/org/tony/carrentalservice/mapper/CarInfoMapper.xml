@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tony.carrentalservice.dao.CarInfoMapper">
+  <resultMap id="BaseResultMap" type="org.tony.carrentalservice.model.CarInfo">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="gmt_created" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, model, status, gmt_created, gmt_modified
+  </sql>
+
+  <select id="selectModelsByConditions" parameterType="java.util.Map" resultType="String">
+    select distinct(model)
+    from car_info
+    where car_info.status = #{carStatus} and car_info.id not in (
+      SELECT order_info.car_id
+      FROM
+      order_info
+      WHERE
+      order_info.status = #{orderStatus}
+      AND ( order_info.start_time &lt;= #{startTime} AND order_info.end_time >= #{startTime} )
+      OR ( order_info.start_time &lt;= #{endTime} AND order_info.end_time >= #{endTime} )
+    );
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from car_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="org.tony.carrentalservice.model.CarInfo">
+    insert into car_info (id, model, status, 
+      gmt_created, gmt_modified)
+    values (#{id,jdbcType=BIGINT}, #{model,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, 
+      #{gmtCreated,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.tony.carrentalservice.model.CarInfo">
+    insert into car_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreated != null">
+        gmt_created,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="gmtCreated != null">
+        #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.tony.carrentalservice.model.CarInfo">
+    update car_info
+    <set>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="gmtCreated != null">
+        gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.tony.carrentalservice.model.CarInfo">
+    update car_info
+    set model = #{model,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
