@@ -1,8 +1,13 @@
-package org.tony.carrentalservice.model;
+package org.tony.carrentalservice.dto;
 
 import java.util.Date;
 
-public class OrderInfo {
+public class OrderInfoDTO {
+
+    public static final short STATUS_CANCELED = 0;
+    public static final short STATUS_PENDING = 1;
+    public static final short STATUS_FINISHED = 2;
+
     private Long id;
 
     private String userName;
@@ -19,7 +24,7 @@ public class OrderInfo {
 
     private Date gmtModified;
 
-    public OrderInfo(Long id, String userName, Long carId, Date startTime, Date endTime, Short status, Date gmtCreated, Date gmtModified) {
+    public OrderInfoDTO(Long id, String userName, Long carId, Date startTime, Date endTime, Short status, Date gmtCreated, Date gmtModified) {
         this.id = id;
         this.userName = userName;
         this.carId = carId;
@@ -30,10 +35,8 @@ public class OrderInfo {
         this.gmtModified = gmtModified;
     }
 
-    public OrderInfo() {
+    public OrderInfoDTO() {
         super();
-        this.gmtCreated = new Date();
-        this.gmtModified = new Date();
     }
 
     public Long getId() {

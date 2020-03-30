@@ -3,7 +3,12 @@ package org.tony.carrentalservice.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tony.carrentalservice.dao.CarInfoMapper;
+import org.tony.carrentalservice.dto.CarInfoDTO;
+import org.tony.carrentalservice.dto.OrderInfoDTO;
+import org.tony.carrentalservice.model.CarInfo;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +28,12 @@ public class CarInfoService {
 
     public void update() {}
 
-    public List<String> selectModelsByConditions(Map<String, Object> conditions) {
+    public List<String> selectModelsByConditions(Date startTime, Date endTime) {
+        Map<String, Object> conditions = new HashMap<>();
+        conditions.put("carStatus", CarInfoDTO.STATUS_ENABLE);
+        conditions.put("orderStatus", OrderInfoDTO.STATUS_PENDING);
+        conditions.put("startTime", startTime);
+        conditions.put("endTime", endTime);
         return this.carInfoMapper.selectModelsByConditions(conditions);
     }
 

@@ -14,17 +14,30 @@
     id, model, status, gmt_created, gmt_modified
   </sql>
 
+  <select id="selectOneByConditions" parameterType="java.util.Map" resultType="org.tony.carrentalservice.model.CarInfo">
+    select id, gmt_modified from car_info
+    where car_info.status = #{carStatus}
+    and car_info.model = #{carModel}
+    and not exists (
+      select order_info.car_id from order_info
+      where order_info.status = #{orderStatus}
+        and ((order_info.start_time &lt;= #{startTime} and order_info.end_time &gt;= #{startTime})
+        or (order_info.start_time &lt;= #{endTime} and order_info.end_time &gt;= #{endTime})
+        or (order_info.start_time &gt;= #{startTime} and order_info.end_time &lt;= #{endTime}))
+        and order_info.car_id = car_info.id
+    ) limit 1;
+  </select>
+
   <select id="selectModelsByConditions" parameterType="java.util.Map" resultType="String">
-    select distinct(model)
-    from car_info
-    where car_info.status = #{carStatus} and car_info.id not in (
-      SELECT order_info.car_id
-      FROM
-      order_info
-      WHERE
-      order_info.status = #{orderStatus}
-      AND ( order_info.start_time &lt;= #{startTime} AND order_info.end_time >= #{startTime} )
-      OR ( order_info.start_time &lt;= #{endTime} AND order_info.end_time >= #{endTime} )
+    select distinct(model) from car_info
+    where car_info.status = #{carStatus}
+    and not exists (
+      select order_info.car_id from order_info
+      where order_info.status = #{orderStatus}
+        and ((order_info.start_time &lt;= #{startTime} and order_info.end_time &gt;= #{startTime})
+        or (order_info.start_time &lt;= #{endTime} and order_info.end_time &gt;= #{endTime})
+        or (order_info.start_time &gt;= #{startTime} and order_info.end_time &lt;= #{endTime}))
+        and order_info.car_id = car_info.id
     );
   </select>
 

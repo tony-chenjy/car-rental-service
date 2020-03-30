@@ -9,6 +9,8 @@ import java.util.Map;
 @Repository
 public interface CarInfoMapper {
 
+    CarInfo selectOneByConditions(Map<String, Object> conditions);
+
     List<String> selectModelsByConditions(Map<String, Object> conditions);
 
     int deleteByPrimaryKey(Long id);
