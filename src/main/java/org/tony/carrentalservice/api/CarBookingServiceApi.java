@@ -1,16 +1,15 @@
 package org.tony.carrentalservice.api;
 
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tony.carrentalservice.bean.R;
+import org.tony.carrentalservice.dto.OrderInfoDTO;
 import org.tony.carrentalservice.service.CarInfoService;
 import org.tony.carrentalservice.service.OrderInfoService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author tony.chenjy
@@ -47,13 +46,15 @@ public class CarBookingServiceApi {
 
     @ApiOperation(value="取消订单", notes="notes")
     @DeleteMapping("/{orderId}")
-    public Map<String, Object> cancel(@PathVariable String orderId) {
-        return null;
+    public R cancel(@PathVariable Long orderId) {
+        this.orderInfoService.update(orderId, OrderInfoDTO.STATUS_CANCELED);
+        return R.success();
     }
 
     @ApiOperation(value="归还租赁汽车完成订单", notes="notes")
     @PutMapping("/{orderId}")
-    public Map<String, Object> finish(@PathVariable String orderId) {
-        return null;
+    public R finish(@PathVariable Long orderId) {
+        this.orderInfoService.update(orderId, OrderInfoDTO.STATUS_FINISHED);
+        return R.success();
     }
 }

@@ -31,7 +31,11 @@ public class OrderInfoService {
 
     public void delete() {}
 
-    public void update() {}
+    public void update(Long id, Short status) {
+        OrderInfo model = this.orderInfoMapper.selectByPrimaryKey(id);
+        model.setStatus(status);
+        this.orderInfoMapper.updateByPrimaryKey(model);
+    }
 
     public void select() {}
 
