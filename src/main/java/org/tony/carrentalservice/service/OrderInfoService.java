@@ -11,6 +11,7 @@ import org.tony.carrentalservice.model.OrderInfo;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,10 +35,18 @@ public class OrderInfoService {
     public void update(Long id, Short status) {
         OrderInfo model = this.orderInfoMapper.selectByPrimaryKey(id);
         model.setStatus(status);
+        model.setGmtModified(new Date());
         this.orderInfoMapper.updateByPrimaryKey(model);
     }
 
-    public void select() {}
+    public List<OrderInfo> selectByConditions(String userName, Date startTime, Date endTime, Short status) {
+        Map<String, Object> conditions = new HashMap<>();
+        conditions.put("userName", userName);
+        conditions.put("startTime", startTime);
+        conditions.put("endTime", endTime);
+        conditions.put("status", status);
+        return this.orderInfoMapper.selectByConditions(conditions);
+    }
 
     public void book(String carModel, String username, Date startTime, Date endTime) throws Exception {
         Map<String, Object> conditions = new HashMap<>();

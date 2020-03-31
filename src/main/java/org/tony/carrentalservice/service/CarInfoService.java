@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.tony.carrentalservice.dao.CarInfoMapper;
 import org.tony.carrentalservice.dto.CarInfoDTO;
 import org.tony.carrentalservice.dto.OrderInfoDTO;
-import org.tony.carrentalservice.model.CarInfo;
 
 import java.util.Date;
 import java.util.HashMap;
