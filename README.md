@@ -24,3 +24,51 @@ Car Model  In stock
 Toyota Camry    2 
 BMW 650 2
 ```
+
+## api design
+In order to keep it simple, I design only service api CarBookingServiceApi with five method implementing the basic rental car booking functions.
+```
+CarBookingServiceApi
+1. query the car available between the time client wants to rent
+2. rent a car in specific model
+3. query the order in specific status between specific time
+4. cancel a specific order
+5. update the order when client return the car
+```
+
+## database design
+I design two tables.
+
+Table car_info is used to record the information of each car.
+```
+CREATE TABLE `car_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `model` varchar(255) DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `gmt_created` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+```
+
+Table order_info is used to record each order.
+```
+CREATE TABLE `order_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT NULL,
+  `car_id` bigint(20) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `status` smallint(6) DEFAULT NULL,
+  `gmt_created` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+```
+
+## implementation
+I use SpringBoot to build a micro service application, use mysql to store data, use swagger to describe and test the api.
+
+You can browse the api document with the following url after running the application.
+
+`http://localhost:8080/swagger-ui.html#/car-booking-service-api`
